@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ATLANT Ecosystem</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== ВЕСЬ CSS ЗДЕСЬ ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(108, 99, 255, 0.2);
+            z-index: 100;
+        }
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6C63FF, #9D8CFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        nav a {
+            color: #b0b0c0;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        nav a:hover { color: #6C63FF; }
+        .hero {
+            padding: 120px 0 100px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, #6C63FF, #9D8CFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 20px;
+            color: #b0b0c0;
+            margin-bottom: 40px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 14px 36px;
+            background: #6C63FF;
+            color: #fff;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            -webkit-text-fill-color: #fff;
+        }
+        .btn:hover {
+            background: #5a52e0;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.3);
+        }
+        .concept {
+            padding: 80px 0;
+            background: #111118;
+        }
+        .concept h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+        }
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+        .concept-card {
+            background: #1a1a26;
+            padding: 30px 20px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #2a2a3a;
+            transition: all 0.3s;
+        }
+        .concept-card:hover {
+            transform: translateY(-5px);
+            border-color: #6C63FF;
+        }
+        .concept-card .icon { font-size: 40px; margin-bottom: 12px; }
+        .concept-card h3 { font-size: 18px; margin-bottom: 8px; }
+        .concept-card p { font-size: 14px; color: #9090a0; }
+        .roadmap {
+            padding: 80px 0;
+        }
+        .roadmap h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+        }
+        #phases-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        .phase-card {
+            background: #14141e;
+            border-radius: 16px;
+            padding: 24px 30px;
+            border-left: 6px solid #3a3a50;
+            transition: all 0.3s;
+        }
+        .phase-card:hover {
+            transform: translateX(6px);
+        }
+        .phase-card .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .phase-card .phase-header h3 {
+            font-size: 22px;
+        }
+        .phase-card .phase-header .badge {
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-done {
+            background: #1a3a2a;
+            color: #4ade80;
+        }
+        .badge-inprogress {
+            background: #3a2a1a;
+            color: #fbbf24;
+        }
+        .badge-todo {
+            background: #1a1a2a;
+            color: #6b7280;
+        }
+        .badge-blocked {
+            background: #3a1a1a;
+            color: #f87171;
+        }
+        .task-list {
+            list-style: none;
+            margin: 12px 0 16px;
+        }
+        .task-list li {
+            padding: 4px 0;
+            font-size: 15px;
+            color: #c0c0d0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .task-list li::before {
+            content: "⬜";
+            font-size: 18px;
+        }
+        .task-list li.done::before {
+            content: "✅";
+        }
+        .task-list li.inprogress::before {
+            content: "⏳";
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #2a2a3a;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6C63FF, #9D8CFF);
+            border-radius: 10px;
+            transition: width 0.6s ease;
+        }
+        .progress-text {
+            font-size: 13px;
+            color: #9090a0;
+            margin-top: 4px;
+            display: block;
+            text-align: right;
+        }
+        .team {
+            padding: 80px 0;
+            background: #111118;
+        }
+        .team h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+        }
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+        .team-card {
+            text-align: center;
+            background: #1a1a26;
+            padding: 30px 40px;
+            border-radius: 16px;
+            border: 1px solid #2a2a3a;
+        }
+        .team-card .avatar { font-size: 56px; }
+        .team-card h3 { font-size: 20px; margin: 8px 0 4px; }
+        .team-card p { color: #9090a0; }
+        footer {
+            padding: 30px 0;
+            background: #0a0a0f;
+            border-top: 1px solid #1a1a26;
+        }
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        footer p { color: #6b6b7a; font-size: 14px; }
+        footer .socials a {
+            color: #6b6b7a;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        footer .socials a:hover { color: #6C63FF; }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 17px; }
+            .concept-grid { grid-template-columns: 1fr 1fr; }
+            .phase-card .phase-header { flex-direction: column; align-items: flex-start; }
+            nav a { margin-left: 16px; font-size: 14px; }
+        }
+        @media (max-width: 480px) {
+            .concept-grid { grid-template-columns: 1fr; }
+            .team-grid { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ШАПКА -->
+    <header>
+        <div class="container">
+            <div class="logo">Z.hub 👾</div>
+            <nav>
+                <a href="#concept">Концепция</a>
+                <a href="#roadmap">Дорожная карта</a>
+                <a href="#team">Команда</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <section class="hero">
+        <div class="container">
+            <h1>Строим экосистему <br />с <span>ИИ-ассистентом</span></h1>
+            <p>Открытая разработка. Следите за нашим прогрессом.</p>
+            <a href="#roadmap" class="btn">Смотреть этапы →</a>
+        </div>
+    </section>
+
+    <!-- КОНЦЕПЦИЯ -->
+    <section id="concept" class="concept">
+        <div class="container">
+            <h2>Наша концепция</h2>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <div class="icon">🧠</div>
+                    <h3>ИИ-помощник</h3>
+                    <p>Анализирует голосовые заметки, ставит задачи, ведет календарь</p>
+                </div>
+                <div class="concept-card">
+                    <div class="icon">💬</div>
+                    <h3>Мессенджер</h3>
+                    <p>Общение в комнатах с интеграцией ИИ</p>
+                </div>
+                <div class="concept-card">
+                    <div class="icon">📅</div>
+                    <h3>Умный календарь</h3>
+                    <p>Планировщик с заметками и напоминаниями</p>
+                </div>
+                <div class="concept-card">
+                    <div class="icon">🎮</div>
+                    <h3>Игровая база</h3>
+                    <p>Свой сервер Minecraft и аркадные игры</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ДОРОЖНАЯ КАРТА -->
+    <section id="roadmap" class="roadmap">
+        <div class="container">
+            <h2>Дорожная карта</h2>
+            <div id="phases-container">
+                <!-- Сюда JavaScript добавит карточки -->
+            </div>
+        </div>
+    </section>
+
+    <!-- КОМАНДА -->
+    <section id="team" class="team">
+        <div class="container">
+            <h2>Команда</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="avatar">👨‍💻</div>
+                    <h3>Разработчик</h3>
+                    <p>Backend / AI</p>
+                </div>
+                <div class="team-card">
+                    <div class="avatar">👨‍💻</div>
+                    <h3>Разработчик</h3>
+                    <p>Fullstack / DevOps</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОДВАЛ -->
+    <footer>
+        <div class="container">
+            <p>© 2025 ATLANT Ecosystem. Сделано с ❤️</p>
+            <div class="socials">
+                <a href="#">Telegram</a>
+                <a href="#">YouTube</a>
+                <a href="#">VK</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== ВЕСЬ JS ЗДЕСЬ ===== -->
+    <script>
+        // Данные этапов
+        const phases = [
+            {
+                id: 0,
+                title: "Фаза 0: Фундамент",
+                status: "done",
+                tasks: [
+                    { text: "Создать GitHub репозиторий", done: true },
+                    { text: "Настроить Docker", done: true },
+                    { text: "Выбрать облачного провайдера", done: false },
+                    { text: "Создать сайт-витрину", done: true },
+                ],
+            },
+            {
+                id: 1,
+                title: "Фаза 1: Ядро и безопасность",
+                status: "inprogress",
+                tasks: [
+                    { text: "Сервис авторизации (/register, /login)", done: false },
+                    { text: "JWT токены (Access + Refresh)", done: false },
+                    { text: "API Gateway (прокси для модулей)", done: false },
+                    { text: "База данных PostgreSQL", done: false },
+                ],
+            },
+            {
+                id: 2,
+                title: "Фаза 2: Телеграм-Бот",
+                status: "todo",
+                tasks: [
+                    { text: "Создать бота в @BotFather", done: false },
+                    { text: "Привязка аккаунта через ссылку", done: false },
+                    { text: "Команды /profile и /remind", done: false },
+                    { text: "Оповещения пользователей", done: false },
+                ],
+            },
+            {
+                id: 3,
+                title: "Фаза 3: ИИ-Модуль (Джарвис)",
+                status: "todo",
+                tasks: [
+                    { text: "Интеграция Whisper (голос → текст)", done: false },
+                    { text: "Настройка System Prompt для GPT", done: false },
+                    { text: "Создание задач из голоса", done: false },
+                    { text: "Векторная БД для памяти (RAG)", done: false },
+                ],
+            },
+            {
+                id: 4,
+                title: "Фаза 4: Планировщик",
+                status: "todo",
+                tasks: [
+                    { text: "Модель данных (events, notes)", done: false },
+                    { text: "CRUD для событий", done: false },
+                    { text: "Связь заметок с календарем", done: false },
+                    { text: "Автоматические напоминания", done: false },
+                ],
+            },
+            {
+                id: 5,
+                title: "Фаза 5: Игры и Мессенджер",
+                status: "todo",
+                tasks: [
+                    { text: "Создать комнаты (чат)", done: false },
+                    { text: "WebSocket для живых сообщений", done: false },
+                    { text: "Арендовать VPS под Minecraft", done: false },
+                    { text: "Вайтлист через API", done: false },
+                ],
+            },
+            {
+                id: 6,
+                title: "Фаза 6: Монетизация и дизайн",
+                status: "todo",
+                tasks: [
+                    { text: "Баланс и подписки (ЮKassa)", done: false },
+                    { text: "Ограничения для ИИ", done: false },
+                    { text: "Сделать дизайн в Figma", done: false },
+                    { text: "Фронтенд на React", done: false },
+                ],
+            },
+        ];
+
+        // Рендеринг
+        function renderPhases() {
+            const container = document.getElementById('phases-container');
+            if (!container) return;
+
+            const statusMap = {
+                done: { label: '✅ Готово', class: 'badge-done' },
+                inprogress: { label: '⏳ В работе', class: 'badge-inprogress' },
+                todo: { label: '⬜ Не начато', class: 'badge-todo' },
+                blocked: { label: '❌ Заблокировано', class: 'badge-blocked' },
+            };
+
+            let html = '';
+            phases.forEach(phase => {
+                const total = phase.tasks.length;
+                const completed = phase.tasks.filter(t => t.done).length;
+                const progressPercent = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+                let tasksHtml = '';
+                phase.tasks.forEach(task => {
+                    let cls = '';
+                    if (task.done) cls = 'done';
+                    else if (phase.status === 'inprogress') cls = 'inprogress';
+                    tasksHtml += `<li class="${cls}">${task.text}</li>`;
+                });
+
+                const statusInfo = statusMap[phase.status] || statusMap.todo;
+
+                html += `
+                    <div class="phase-card">
+                        <div class="phase-header">
+                            <h3>${phase.title}</h3>
+                            <span class="badge ${statusInfo.class}">${statusInfo.label}</span>
+                        </div>
+                        <ul class="task-list">${tasksHtml}</ul>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                        </div>
+                        <span class="progress-text">${progressPercent}%</span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Запуск
+        document.addEventListener('DOMContentLoaded', renderPhases);
+    </script>
+</body>
+</html>

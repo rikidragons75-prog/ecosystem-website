@@ -4,363 +4,399 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VOID Ecosystem</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <meta name="description" content="VOID — экосистема с ИИ-ассистентом. Открытая разработка: концепция и команда." />
+
+    <!-- Шрифты: Inter (основной текст) и DotGothic16 (пиксельный логотип) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Иконки Font Awesome (список иконок: https://fontawesome.com/icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
     <style>
-        /* ===== БАЗОВЫЕ СБРОСЫ ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* =============================================================
+           ЦВЕТА САЙТА — меняй здесь, и они поменяются везде
+           ============================================================= */
+        :root {
+            /* Фоны */
+            --bg: #0a0a0f;
+            --section: rgba(17, 17, 26, 0.6);    /* полосы секций */
+            --panel: rgba(26, 26, 38, 0.78);     /* карточки */
+            --panel-solid: #14141e;
+            --border: #2a2a3a;
+            /* Основной акцент — фиолетовый VOID */
+            --accent: #6C63FF;
+            --accent-hover: #5a52e0;
+            --accent-light: #9D8CFF;
+            --accent-grad: linear-gradient(135deg, #6C63FF, #b3a6ff);
+            --accent-glow: rgba(108, 99, 255, 0.4);
+            --accent-soft: rgba(108, 99, 255, 0.12);
+            /* Цвета статусов (точки в метках) */
+            --green: #4ade80;
+            --amber: #fbbf24;
+            --red: #f87171;
+            --gray: #6b7280;
+            /* Текст */
+            --text: #c0c0d0;
+            --text-dim: #9090a0;
+            --text-mute: #6b6b7a;
+            --white: #ffffff;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        ::selection { background: var(--accent); color: var(--white); }
+
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #0a0a0a;
-            color: #c0c0c0;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
+        a { color: inherit; }
+
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* ===== ШАПКА ===== */
+        /* =============================================================
+           ФОН: фиолетовое свечение + сетка + строки развёртки
+           ============================================================= */
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        /* Два медленно плавающих пятна света */
+        .bg .glow {
+            position: absolute;
+            width: 60vmax;
+            height: 60vmax;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.35;
+        }
+
+        .bg .glow.one {
+            top: -20vmax;
+            left: -15vmax;
+            background: radial-gradient(circle, #6C63FF 0%, transparent 65%);
+            animation: drift 22s ease-in-out infinite alternate;
+        }
+
+        .bg .glow.two {
+            bottom: -25vmax;
+            right: -20vmax;
+            background: radial-gradient(circle, #9D4CFF 0%, transparent 65%);
+            animation: drift 28s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes drift {
+            from { transform: translate(0, 0); }
+            to { transform: translate(8vmax, 6vmax); }
+        }
+
+        /* Тонкая сетка, как на экране терминала */
+        .bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(157, 140, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(157, 140, 255, 0.05) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+        }
+
+        /* Строки развёртки */
+        .bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(to bottom, transparent 0, transparent 2px, rgba(0, 0, 0, 0.2) 3px);
+        }
+
+        /* =============================================================
+           ШАПКА
+           ============================================================= */
         header {
             position: sticky;
             top: 0;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(0, 255, 100, 0.2);
             z-index: 100;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(108, 99, 255, 0.2);
+            padding: 14px 0;
         }
 
         header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 16px;
         }
 
         .logo {
+            font-family: 'DotGothic16', monospace;
             font-size: 24px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #00ff66;
-            text-shadow: 0 0 20px rgba(0, 255, 100, 0.3);
-        }
-
-        .logo span {
-            color: #ffffff;
-        }
-
-        nav a {
-            color: #888888;
+            letter-spacing: 3px;
+            color: var(--white);
             text-decoration: none;
-            margin-left: 30px;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #00ff66;
-        }
-
-        /* ===== ГЛАВНЫЙ ЭКРАН ===== */
-        .hero {
-            padding: 140px 0 100px;
-            text-align: center;
-            border-bottom: 1px solid rgba(0, 255, 100, 0.1);
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
-
-        .hero h1 span {
-            color: #00ff66;
-            text-shadow: 0 0 40px rgba(0, 255, 100, 0.2);
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: #888888;
-            margin-bottom: 40px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 14px 40px;
-            background: transparent;
-            color: #00ff66;
-            border: 2px solid #00ff66;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn:hover {
-            background: #00ff66;
-            color: #0a0a0a;
-            box-shadow: 0 0 40px rgba(0, 255, 100, 0.3);
-        }
-
-        /* ===== КОНЦЕПЦИЯ ===== */
-        .concept {
-            padding: 80px 0;
-            background: #111111;
-            border-bottom: 1px solid rgba(0, 255, 100, 0.05);
-        }
-
-        .concept h2 {
-            text-align: center;
-            font-size: 36px;
-            margin-bottom: 50px;
-            color: #ffffff;
-        }
-
-        .concept h2 span {
-            color: #00ff66;
-        }
-
-        .concept-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 30px;
-        }
-
-        .concept-card {
-            background: #1a1a1a;
-            padding: 30px 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid #2a2a2a;
-            transition: all 0.3s;
-        }
-
-        .concept-card:hover {
-            transform: translateY(-5px);
-            border-color: #00ff66;
-            box-shadow: 0 0 30px rgba(0, 255, 100, 0.05);
-        }
-
-        .concept-card .icon {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
-
-        .concept-card h3 {
-            font-size: 18px;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
-
-        .concept-card p {
-            font-size: 14px;
-            color: #666666;
-        }
-
-        /* ===== ДОРОЖНАЯ КАРТА ===== */
-        .roadmap {
-            padding: 80px 0;
-            background: #0a0a0a;
-            border-bottom: 1px solid rgba(0, 255, 100, 0.05);
-        }
-
-        .roadmap h2 {
-            text-align: center;
-            font-size: 36px;
-            margin-bottom: 50px;
-            color: #ffffff;
-        }
-
-        .roadmap h2 span {
-            color: #00ff66;
-        }
-
-        #phases-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        .phase-card {
-            background: #141414;
-            border-radius: 12px;
-            padding: 20px 28px;
-            border-left: 4px solid #2a2a2a;
-            transition: all 0.3s;
-        }
-
-        .phase-card:hover {
-            transform: translateX(6px);
-        }
-
-        .phase-card .phase-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .phase-card .phase-header h3 {
-            font-size: 20px;
-            color: #ffffff;
-        }
-
-        .phase-card .phase-header .badge {
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .badge-done {
-            background: rgba(0, 255, 100, 0.15);
-            color: #00ff66;
-            border: 1px solid rgba(0, 255, 100, 0.2);
-        }
-
-        .badge-inprogress {
-            background: rgba(255, 200, 0, 0.15);
-            color: #ffcc00;
-            border: 1px solid rgba(255, 200, 0, 0.2);
-        }
-
-        .badge-todo {
-            background: rgba(255, 255, 255, 0.05);
-            color: #555555;
-            border: 1px solid #222222;
-        }
-
-        .badge-blocked {
-            background: rgba(255, 0, 0, 0.15);
-            color: #ff4444;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-        }
-
-        .task-list {
-            list-style: none;
-            margin: 10px 0 14px;
-        }
-
-        .task-list li {
-            padding: 3px 0;
-            font-size: 14px;
-            color: #999999;
+            white-space: nowrap;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .task-list li::before {
-            content: "⬜";
-            font-size: 16px;
+        .logo .mark {
+            color: var(--accent-light);
+            text-shadow: 0 0 14px var(--accent-glow);
         }
 
-        .task-list li.done::before {
-            content: "✅";
+        nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-left: 28px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: color 0.3s;
         }
 
-        .task-list li.inprogress::before {
-            content: "⏳";
+        nav a:hover { color: var(--accent-light); }
+
+        /* =============================================================
+           ГЛАВНЫЙ ЭКРАН
+           ============================================================= */
+        .hero {
+            padding: 130px 0 110px;
+            text-align: center;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: #1a1a1a;
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 14px;
+            margin-bottom: 26px;
+            border: 1px solid rgba(108, 99, 255, 0.35);
+            border-radius: 20px;
+            background: var(--accent-soft);
+            color: var(--accent-light);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .tag::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            box-shadow: 0 0 10px var(--accent-glow);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.35; }
+        }
+
+        .hero h1 {
+            font-size: clamp(34px, 6.5vw, 64px);
+            font-weight: 800;
+            line-height: 1.15;
+            color: var(--white);
+            margin-bottom: 22px;
+            text-wrap: balance;
+        }
+
+        .hero h1 span {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 24px rgba(108, 99, 255, 0.45));
+        }
+
+        .hero .lead {
+            font-size: 19px;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+        }
+
+        .hero .lead .cursor {
+            color: var(--accent-light);
+            animation: blink 1.1s steps(1) infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 40px;
+            background: transparent;
+            color: var(--accent-light);
+            border: 2px solid var(--accent);
             border-radius: 10px;
-            overflow: hidden;
-            margin-top: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: #00ff66;
-            border-radius: 10px;
-            transition: width 0.6s ease;
-            box-shadow: 0 0 20px rgba(0, 255, 100, 0.2);
+        .btn:hover {
+            background: var(--accent);
+            color: var(--white);
+            box-shadow: 0 0 40px var(--accent-glow);
         }
 
-        .progress-text {
-            font-size: 12px;
-            color: #555555;
-            margin-top: 4px;
-            display: block;
-            text-align: right;
+        /* =============================================================
+           СЕКЦИИ (общий стиль)
+           ============================================================= */
+        section.block { padding: 90px 0; }
+
+        section.block.alt {
+            background: var(--section);
+            border-top: 1px solid rgba(108, 99, 255, 0.1);
+            border-bottom: 1px solid rgba(108, 99, 255, 0.1);
         }
 
-        /* ===== КОМАНДА ===== */
-        .team {
-            padding: 80px 0;
-            background: #111111;
-            border-bottom: 1px solid rgba(0, 255, 100, 0.05);
-        }
-
-        .team h2 {
+        section.block h2 {
             text-align: center;
             font-size: 36px;
+            font-weight: 800;
+            color: var(--white);
             margin-bottom: 50px;
-            color: #ffffff;
         }
 
-        .team h2 span {
-            color: #00ff66;
+        section.block h2 span {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
+        section.block h2::after {
+            content: "";
+            display: block;
+            width: 32px;
+            height: 3px;
+            margin: 14px auto 0;
+            border-radius: 2px;
+            background: var(--accent);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        /* =============================================================
+           КОНЦЕПЦИЯ
+           ============================================================= */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .concept-card {
+            background: var(--panel);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px 24px;
+            transition: all 0.3s;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.15);
+        }
+
+        .concept-card i {
+            font-size: 32px;
+            color: var(--accent-light);
+            filter: drop-shadow(0 0 10px rgba(108, 99, 255, 0.5));
+            margin-bottom: 16px;
+        }
+
+        .concept-card h3 {
+            font-size: 18px;
+            color: var(--white);
+            margin-bottom: 6px;
+        }
+
+        .concept-card p {
+            font-size: 14px;
+            color: var(--text-dim);
+        }
+
+        /* =============================================================
+           КОМАНДА
+           ============================================================= */
         .team-grid {
             display: flex;
             justify-content: center;
-            gap: 50px;
+            gap: 24px;
             flex-wrap: wrap;
         }
 
         .team-card {
+            width: 260px;
+            max-width: 100%;
             text-align: center;
-            background: #1a1a1a;
-            padding: 30px 40px;
-            border-radius: 12px;
-            border: 1px solid #2a2a2a;
+            background: var(--panel);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 24px;
             transition: all 0.3s;
         }
 
         .team-card:hover {
-            border-color: #00ff66;
+            border-color: var(--accent);
+            transform: translateY(-5px);
         }
 
-        .team-card .avatar {
-            font-size: 48px;
+        .avatar {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-family: 'DotGothic16', monospace;
+            font-size: 28px;
+            color: var(--white);
+            background: var(--accent-soft);
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 24px rgba(108, 99, 255, 0.3);
         }
 
-        .team-card h3 {
-            font-size: 18px;
-            color: #ffffff;
-            margin: 8px 0 4px;
-        }
+        .team-card h3 { font-size: 18px; color: var(--white); }
+        .team-card p { font-size: 14px; color: var(--accent-light); }
 
-        .team-card p {
-            color: #666666;
-            font-size: 14px;
-        }
-
-        /* ===== ПОДВАЛ ===== */
+        /* =============================================================
+           ПОДВАЛ
+           ============================================================= */
         footer {
-            padding: 30px 0;
-            background: #0a0a0a;
-            border-top: 1px solid #1a1a1a;
+            padding: 28px 0;
+            background: rgba(10, 10, 15, 0.92);
+            border-top: 1px solid var(--border);
         }
 
         footer .container {
@@ -368,119 +404,97 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 14px;
         }
 
-        footer p {
-            color: #444444;
-            font-size: 14px;
-        }
+        footer p { color: var(--text-mute); font-size: 14px; }
+        footer p span { color: var(--accent-light); font-weight: 700; }
+        footer .fa-heart { color: var(--accent-light); }
+        footer .online { color: var(--accent-light); font-weight: 600; margin-left: 10px; font-size: 12px; }
 
-        footer p span {
-            color: #00ff66;
-        }
+        .socials { display: flex; gap: 18px; flex-wrap: wrap; }
 
-        footer .socials a {
-            color: #444444;
+        .socials a {
+            color: var(--text-mute);
             text-decoration: none;
-            margin-left: 20px;
             font-size: 14px;
             transition: color 0.3s;
         }
 
-        footer .socials a:hover {
-            color: #00ff66;
+        .socials a:hover { color: var(--accent-light); }
+        .socials a i { margin-right: 6px; }
+
+        /* =============================================================
+           АДАПТИВ (телефоны)
+           ============================================================= */
+        @media (max-width: 640px) {
+            header .container { flex-direction: column; gap: 8px; }
+            nav a { margin: 0 10px; font-size: 14px; }
+            .hero { padding: 80px 0 70px; }
+            .hero .lead { font-size: 16px; }
+            section.block { padding: 60px 0; }
+            section.block h2 { font-size: 28px; margin-bottom: 34px; }
+            footer .container { justify-content: center; text-align: center; }
         }
 
-        /* ===== АДАПТИВ ===== */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 32px;
-            }
-
-            .hero p {
-                font-size: 17px;
-            }
-
-            .concept-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .phase-card .phase-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            nav a {
-                margin-left: 16px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .concept-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .team-grid {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .hero h1 {
-                font-size: 26px;
-            }
-
-            .logo {
-                font-size: 18px;
-            }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            * { transition: none !important; animation: none !important; }
         }
     </style>
 </head>
 <body>
-    <!-- ШАПКА -->
+
+    <!-- Фон (свечение, сетка) -->
+    <div class="bg" aria-hidden="true">
+        <div class="glow one"></div>
+        <div class="glow two"></div>
+    </div>
+
+    <!-- ===================== ШАПКА ===================== -->
     <header>
         <div class="container">
-            <div class="logo">◈ <span>VOID</span></div>
+            <a href="#top" class="logo"><span class="mark">◈</span>VOID</a>
             <nav>
                 <a href="#concept">Концепция</a>
-                <a href="#roadmap">Дорожная карта</a>
                 <a href="#team">Команда</a>
             </nav>
         </div>
     </header>
 
-    <!-- ГЛАВНЫЙ ЭКРАН -->
-    <section class="hero">
+    <!-- ===================== ГЛАВНЫЙ ЭКРАН ===================== -->
+    <section class="hero" id="top">
         <div class="container">
+            <div class="tag">Открытая разработка</div>
             <h1>Строим экосистему <br />с <span>ИИ-ассистентом</span></h1>
-            <p>Открытая разработка. Следите за нашим прогрессом.</p>
-            <a href="#roadmap" class="btn">Смотреть этапы →</a>
+            <p class="lead">Следите за нами<span class="cursor">_</span></p>
+            <a href="#concept" class="btn">Узнать больше →</a>
+
         </div>
     </section>
 
-    <!-- КОНЦЕПЦИЯ -->
-    <section id="concept" class="concept">
+    <!-- ===================== КОНЦЕПЦИЯ ===================== -->
+    <section class="block alt" id="concept">
         <div class="container">
             <h2>Наша <span>концепция</span></h2>
             <div class="concept-grid">
                 <div class="concept-card">
-                    <div class="icon">🧠</div>
+                    <i class="fas fa-brain"></i>
                     <h3>ИИ-помощник</h3>
-                    <p>Анализирует голосовые заметки, ставит задачи, ведет календарь</p>
+                    <p>Анализирует голосовые заметки, ставит задачи, ведёт календарь</p>
                 </div>
                 <div class="concept-card">
-                    <div class="icon">💬</div>
+                    <i class="fas fa-comments"></i>
                     <h3>Мессенджер</h3>
                     <p>Общение в комнатах с интеграцией ИИ</p>
                 </div>
                 <div class="concept-card">
-                    <div class="icon">📅</div>
+                    <i class="fas fa-calendar-days"></i>
                     <h3>Умный календарь</h3>
                     <p>Планировщик с заметками и напоминаниями</p>
                 </div>
                 <div class="concept-card">
-                    <div class="icon">🎮</div>
+                    <i class="fas fa-gamepad"></i>
                     <h3>Игровая база</h3>
                     <p>Свой сервер Minecraft и аркадные игры</p>
                 </div>
@@ -488,28 +502,18 @@
         </div>
     </section>
 
-    <!-- ДОРОЖНАЯ КАРТА -->
-    <section id="roadmap" class="roadmap">
-        <div class="container">
-            <h2>Дорожная <span>карта</span></h2>
-            <div id="phases-container">
-                <!-- Сюда JavaScript добавит карточки -->
-            </div>
-        </div>
-    </section>
-
-    <!-- КОМАНДА -->
-    <section id="team" class="team">
+    <!-- ===================== КОМАНДА ===================== -->
+    <section class="block" id="team">
         <div class="container">
             <h2>Наша <span>команда</span></h2>
             <div class="team-grid">
                 <div class="team-card">
-                    <div class="avatar">👨‍💻</div>
+                    <div class="avatar">U</div>
                     <h3>Uni_vdoom</h3>
                     <p>Creative Director</p>
                 </div>
                 <div class="team-card">
-                    <div class="avatar">👨‍💻</div>
+                    <div class="avatar">R</div>
                     <h3>riki_a.d</h3>
                     <p>Executive Director</p>
                 </div>
@@ -517,149 +521,17 @@
         </div>
     </section>
 
-    <!-- ПОДВАЛ -->
+    <!-- ===================== ПОДВАЛ ===================== -->
     <footer>
         <div class="container">
-            <p>© 2026 <span>VOID</span> Ecosystem. Сделано с ❤️</p>
+            <p>© 2026 <span>VOID</span> Ecosystem. Сделано с <i class="fas fa-heart"></i> <b class="online">● online</b></p>
             <div class="socials">
-                <a href="https://www.youtube.com/watch?v=HIcSWuKMwOw" target="_blank">Telegram</a>
-                <a href="https://www.youtube.com/watch?v=HIcSWuKMwOw" target="_blank">YouTube</a>
-                <a href="https://www.youtube.com/watch?v=HIcSWuKMwOw" target="_blank">VK</a>
+                <a href="https://www.youtube.com/watch?v=HIcSWuKMwOw" target="_blank" rel="noopener"><i class="fab fa-telegram-plane"></i>Telegram</a>
+                <a href="https://www.youtube.com/watch?v=HIcSWuKMwOw" target="_blank" rel="noopener"><i class="fab fa-youtube"></i>YouTube</a>
+                <a href="https://www.youtube.com/watch?v=HIcSWuKMwOw" target="_blank" rel="noopener"><i class="fab fa-vk"></i>VK</a>
             </div>
         </div>
     </footer>
 
-    <!-- ===== ВЕСЬ JS ЗДЕСЬ ===== -->
-    <script>
-        // Данные этапов (обновлённые под реальный прогресс)
-        const phases = [
-            {
-                id: 0,
-                title: "Фаза 0: Фундамент",
-                status: "done",
-                tasks: [
-                    { text: "Создать GitHub репозиторий", done: true },
-                    { text: "Настроить Docker", done: true },
-                    { text: "Выбрать облачного провайдера", done: false },
-                    { text: "Создать сайт-витрину", done: true },
-                ],
-            },
-            {
-                id: 1,
-                title: "Фаза 1: Ядро и безопасность",
-                status: "done",
-                tasks: [
-                    { text: "Сервис авторизации (/register, /login)", done: true },
-                    { text: "JWT токены (Access + Refresh)", done: true },
-                    { text: "API Gateway (прокси для модулей)", done: true },
-                    { text: "База данных PostgreSQL", done: false },
-                ],
-            },
-            {
-                id: 2,
-                title: "Фаза 2: Телеграм-Бот",
-                status: "inprogress",
-                tasks: [
-                    { text: "Создать бота в @BotFather", done: true },
-                    { text: "Привязка аккаунта через ссылку", done: false },
-                    { text: "Команды /profile и /remind", done: true },
-                    { text: "Оповещения пользователей", done: false },
-                ],
-            },
-            {
-                id: 3,
-                title: "Фаза 3: ИИ-Модуль (Джарвис)",
-                status: "todo",
-                tasks: [
-                    { text: "Интеграция Whisper (голос → текст)", done: false },
-                    { text: "Настройка System Prompt для GPT", done: false },
-                    { text: "Создание задач из голоса", done: false },
-                    { text: "Векторная БД для памяти (RAG)", done: false },
-                ],
-            },
-            {
-                id: 4,
-                title: "Фаза 4: Планировщик",
-                status: "todo",
-                tasks: [
-                    { text: "Модель данных (events, notes)", done: false },
-                    { text: "CRUD для событий", done: false },
-                    { text: "Связь заметок с календарем", done: false },
-                    { text: "Автоматические напоминания", done: false },
-                ],
-            },
-            {
-                id: 5,
-                title: "Фаза 5: Игры и Мессенджер",
-                status: "todo",
-                tasks: [
-                    { text: "Создать комнаты (чат)", done: false },
-                    { text: "WebSocket для живых сообщений", done: false },
-                    { text: "Арендовать VPS под Minecraft", done: false },
-                    { text: "Вайтлист через API", done: false },
-                ],
-            },
-            {
-                id: 6,
-                title: "Фаза 6: Монетизация и дизайн",
-                status: "todo",
-                tasks: [
-                    { text: "Баланс и подписки (ЮKassa)", done: false },
-                    { text: "Ограничения для ИИ", done: false },
-                    { text: "Сделать дизайн в Figma", done: false },
-                    { text: "Фронтенд на React", done: false },
-                ],
-            },
-        ];
-
-        // Рендеринг
-        function renderPhases() {
-            const container = document.getElementById('phases-container');
-            if (!container) return;
-
-            const statusMap = {
-                done: { label: '✅ Готово', class: 'badge-done' },
-                inprogress: { label: '⏳ В работе', class: 'badge-inprogress' },
-                todo: { label: '⬜ Не начато', class: 'badge-todo' },
-                blocked: { label: '❌ Заблокировано', class: 'badge-blocked' },
-            };
-
-            let html = '';
-            phases.forEach(phase => {
-                const total = phase.tasks.length;
-                const completed = phase.tasks.filter(t => t.done).length;
-                const progressPercent = total === 0 ? 0 : Math.round((completed / total) * 100);
-
-                let tasksHtml = '';
-                phase.tasks.forEach(task => {
-                    let cls = '';
-                    if (task.done) cls = 'done';
-                    else if (phase.status === 'inprogress') cls = 'inprogress';
-                    tasksHtml += `<li class="${cls}">${task.text}</li>`;
-                });
-
-                const statusInfo = statusMap[phase.status] || statusMap.todo;
-
-                html += `
-                    <div class="phase-card">
-                        <div class="phase-header">
-                            <h3>${phase.title}</h3>
-                            <span class="badge ${statusInfo.class}">${statusInfo.label}</span>
-                        </div>
-                        <ul class="task-list">${tasksHtml}</ul>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${progressPercent}%"></div>
-                        </div>
-                        <span class="progress-text">${progressPercent}%</span>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        // Запуск
-        document.addEventListener('DOMContentLoaded', renderPhases);
-    </script>
 </body>
 </html>
